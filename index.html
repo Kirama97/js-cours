@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cours JavaScript — Série d'exercices</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Space Grotesk"', 'sans-serif'],
+            mono:    ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            js: {
+              yellow: '#F7DF1E',
+              dark:   '#1A1A2E',
+              mid:    '#16213E',
+              accent: '#0F3460',
+              blue:   '#E94560',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Space Grotesk', sans-serif; }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1A1A2E; }
+    ::-webkit-scrollbar-thumb { background: #F7DF1E; border-radius: 3px; }
+
+    /* Code block styling */
+    pre { font-family: 'JetBrains Mono', monospace; }
+
+    /* Module card hover effect */
+    .module-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .module-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(247, 223, 30, 0.2);
+    }
+
+    /* Progress bar animation */
+    .progress-fill {
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Animated badge */
+    @keyframes pulse-yellow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(247,223,30,0.4); }
+      50%       { box-shadow: 0 0 0 8px rgba(247,223,30,0); }
+    }
+    .badge-active { animation: pulse-yellow 2s infinite; }
+
+    /* Exercise toggle */
+    details summary { cursor: pointer; list-style: none; }
+    details summary::marker, details summary::-webkit-details-marker { display: none; }
+    details[open] .chevron { transform: rotate(180deg); }
+    .chevron { transition: transform 0.3s ease; }
+
+    /* Tab active state */
+    .tab-btn.active {
+      background-color: #F7DF1E;
+      color: #1A1A2E;
+    }
+
+    /* Console output */
+    #console-output {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+
+<body class="bg-[#1A1A2E] text-white min-h-screen">
+
+  <!-- ═══════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════ -->
+  <header class="bg-[#16213E] border-b border-[#F7DF1E]/20 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-[#F7DF1E] rounded-lg flex items-center justify-center">
+          <span class="text-[#1A1A2E] font-bold text-lg" style="font-family:'JetBrains Mono'">JS</span>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight">Cours JavaScript</h1>
+          <p class="text-xs text-gray-400">Série d'exercices progressifs</p>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-6">
+        <div class="text-center">
+          <p class="text-[#F7DF1E] font-bold text-xl" id="total-exos">36</p>
+          <p class="text-xs text-gray-400">Exercices</p>
+        </div>
+        <div class="text-center">
+          <p class="text-[#F7DF1E] font-bold text-xl">8</p>
+          <p class="text-xs text-gray-400">Modules</p>
+        </div>
+        <div class="text-center">
+          <p class="text-[#F7DF1E] font-bold text-xl">∞</p>
+          <p class="text-xs text-gray-400">Défis</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════ -->
+  <section class="max-w-7xl mx-auto px-6 py-12">
+    <div class="bg-gradient-to-r from-[#16213E] to-[#0F3460] rounded-2xl p-8 mb-12 border border-[#F7DF1E]/10 relative overflow-hidden">
+      <!-- Background decoration -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-[#F7DF1E]/5 rounded-full -translate-y-1/2 translate-x-1/4"></div>
+      <div class="absolute bottom-0 left-1/3 w-32 h-32 bg-[#F7DF1E]/5 rounded-full translate-y-1/2"></div>
+
+      <div class="relative">
+        <span class="inline-block bg-[#F7DF1E]/10 text-[#F7DF1E] text-xs font-mono px-3 py-1 rounded-full mb-4 border border-[#F7DF1E]/30">
+          console.log("Bienvenue ! 👋")
+        </span>
+        <h2 class="text-3xl md:text-4xl font-bold mb-3">
+          Maîtrisez <span class="text-[#F7DF1E]">JavaScript</span><br>par la pratique
+        </h2>
+        <p class="text-gray-300 max-w-xl mb-6">
+          8 modules progressifs couvrant les fondamentaux du langage.
+          Chaque module contient des leçons commentées et des exercices
+          allant du simple au défi.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href="#modules"
+             class="bg-[#F7DF1E] text-[#1A1A2E] font-semibold px-5 py-2.5 rounded-lg hover:bg-yellow-300 transition-colors">
+            Commencer →
+          </a>
+          <a href="#playground"
+             class="border border-[#F7DF1E]/40 text-[#F7DF1E] font-semibold px-5 py-2.5 rounded-lg hover:bg-[#F7DF1E]/10 transition-colors">
+            Playground
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         MODULES GRID
+    ═══════════════════════════════════════════ -->
+    <div id="modules">
+      <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+        <span class="w-1 h-7 bg-[#F7DF1E] rounded-full inline-block"></span>
+        Modules du cours
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-16">
+
+        <!-- MODULE CARDS (generated by JS below, shown here as template) -->
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         MODULE DETAIL VIEWER
+    ═══════════════════════════════════════════ -->
+    <div id="module-detail" class="hidden mb-16">
+      <div class="bg-[#16213E] rounded-2xl border border-white/10 overflow-hidden">
+
+        <!-- Module header -->
+        <div class="bg-[#0F3460] px-6 py-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span id="detail-badge" class="bg-[#F7DF1E] text-[#1A1A2E] text-xs font-bold font-mono px-2 py-1 rounded"></span>
+            <h3 id="detail-title" class="font-bold text-lg"></h3>
+          </div>
+          <button onclick="fermerDetail()"
+                  class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex border-b border-white/10">
+          <button class="tab-btn active px-5 py-3 text-sm font-medium transition-colors" onclick="switchTab('lecons', this)">
+            📖 Leçons
+          </button>
+          <button class="tab-btn px-5 py-3 text-sm font-medium text-gray-400 hover:text-white transition-colors" onclick="switchTab('exercices', this)">
+            ✏️ Exercices
+          </button>
+          <button class="tab-btn px-5 py-3 text-sm font-medium text-gray-400 hover:text-white transition-colors" onclick="switchTab('concepts', this)">
+            💡 Concepts clés
+          </button>
+        </div>
+
+        <!-- Tab content -->
+        <div id="tab-lecons" class="p-6">
+          <p id="detail-description" class="text-gray-300 mb-4"></p>
+          <div id="detail-lecons" class="space-y-3"></div>
+        </div>
+
+        <div id="tab-exercices" class="p-6 hidden">
+          <div id="detail-exercices" class="space-y-3"></div>
+        </div>
+
+        <div id="tab-concepts" class="p-6 hidden">
+          <div id="detail-concepts" class="flex flex-wrap gap-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PLAYGROUND
+    ═══════════════════════════════════════════ -->
+    <div id="playground" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+        <span class="w-1 h-7 bg-[#F7DF1E] rounded-full inline-block"></span>
+        Playground — Testez votre code
+      </h2>
+
+      <div class="bg-[#16213E] rounded-2xl border border-white/10 overflow-hidden">
+        <!-- Editor header -->
+        <div class="bg-[#0d1117] px-4 py-3 flex items-center justify-between border-b border-white/10">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+            <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+            <span class="ml-3 text-xs text-gray-400 font-mono">script.js</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="effacerCode()"
+                    class="text-xs text-gray-400 hover:text-white px-3 py-1 rounded border border-white/10 hover:border-white/30 transition-colors">
+              Effacer
+            </button>
+            <button onclick="executerCode()"
+                    class="text-xs bg-[#F7DF1E] text-[#1A1A2E] font-semibold px-4 py-1 rounded hover:bg-yellow-300 transition-colors">
+              ▶ Exécuter
+            </button>
+          </div>
+        </div>
+
+        <!-- Code editor (textarea) -->
+        <textarea id="code-editor"
+                  class="w-full bg-[#0d1117] text-green-300 p-4 text-sm font-mono resize-none focus:outline-none border-0"
+                  style="font-family:'JetBrains Mono',monospace; min-height: 200px;"
+                  spellcheck="false"
+                  placeholder="// Écrivez votre code JavaScript ici...
+// Exemple :
+let fruits = ['Mangue', 'Banane', 'Papaye'];
+fruits.forEach(f => console.log(f));"></textarea>
+
+        <!-- Console -->
+        <div class="border-t border-white/10">
+          <div class="bg-[#0F3460] px-4 py-2 flex items-center justify-between">
+            <span class="text-xs text-gray-400 font-mono">Console</span>
+            <button onclick="effacerConsole()"
+                    class="text-xs text-gray-500 hover:text-gray-300">effacer</button>
+          </div>
+          <div id="console-output" class="p-4 text-green-400 text-sm min-h-[80px]">
+            <span class="text-gray-600">// Les résultats de console.log() apparaîtront ici...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Snippets rapides -->
+      <div class="mt-4">
+        <p class="text-xs text-gray-500 mb-3">Exemples rapides :</p>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="chargerSnippet('boucle')" class="snippet-btn text-xs bg-[#16213E] border border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors">Boucle for</button>
+          <button onclick="chargerSnippet('tableau')" class="snippet-btn text-xs bg-[#16213E] border border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors">Map / Filter</button>
+          <button onclick="chargerSnippet('classe')" class="snippet-btn text-xs bg-[#16213E] border border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors">Classe ES6</button>
+          <button onclick="chargerSnippet('async')" class="snippet-btn text-xs bg-[#16213E] border border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors">Async/Await</button>
+          <button onclick="chargerSnippet('fizzbuzz')" class="snippet-btn text-xs bg-[#16213E] border border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors">FizzBuzz</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PROGRESSION TRACKER
+    ═══════════════════════════════════════════ -->
+    <div class="mb-16">
+      <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+        <span class="w-1 h-7 bg-[#F7DF1E] rounded-full inline-block"></span>
+        Ma progression
+      </h2>
+
+      <div class="bg-[#16213E] rounded-2xl border border-white/10 p-6">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm text-gray-400">Modules vus</span>
+          <span id="progress-text" class="text-sm font-bold text-[#F7DF1E]">0 / 8</span>
+        </div>
+        <div class="w-full bg-[#0F3460] rounded-full h-3 mb-6">
+          <div id="progress-bar" class="progress-fill bg-[#F7DF1E] h-3 rounded-full" style="width:0%"></div>
+        </div>
+
+        <div id="progress-modules" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="border-t border-white/10 bg-[#16213E]">
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center">
+      <p class="text-gray-500 text-sm">
+        Cours JavaScript — Chaque exercice se trouve dans le dossier
+        <span class="font-mono text-[#F7DF1E] bg-[#F7DF1E]/10 px-2 py-0.5 rounded">modules/</span>
+      </p>
+      <p class="text-gray-600 text-xs mt-2">Bonne chance à tous les étudiants 🚀</p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════
+       JAVASCRIPT — Page Logic
+  ═══════════════════════════════════════════ -->
+  <script>
+    // ─── Data ───────────────────────────────────────────────
+    const modules = [
+      {
+        id: "01",
+        titre: "Variables & Types",
+        fichier: "modules/01-variables-types.js",
+        emoji: "🔤",
+        niveau: "Débutant",
+        description: "Déclarer des variables avec let/const, comprendre les types (string, number, boolean…) et maîtriser les opérateurs.",
+        lecons: ["Déclarer des variables (let, const, var)", "Les types primitifs", "Template literals", "Opérateurs arithmétiques et logiques"],
+        exercices: ["Affichage personnalisé", "Calculatrice basique", "Vérification pair/impair", "🔥 Expression booléenne"],
+        concepts: ["let", "const", "typeof", "string", "number", "boolean", "template literal", "opérateur", "==="]
+      },
+      {
+        id: "02",
+        titre: "Conditions",
+        fichier: "modules/02-conditions.js",
+        emoji: "🔀",
+        niveau: "Débutant",
+        description: "Contrôler le flux du programme avec if/else, switch, l'opérateur ternaire et les opérateurs modernes.",
+        lecons: ["if / else if / else", "Opérateur ternaire", "switch / case", "?? et ?."],
+        exercices: ["Calcul IMC", "Calculatrice avec switch", "Année bissextile", "🔥 Pierre-Papier-Ciseaux"],
+        concepts: ["if", "else", "switch", "ternaire", "break", "??", "?."]
+      },
+      {
+        id: "03",
+        titre: "Boucles",
+        fichier: "modules/03-boucles.js",
+        emoji: "🔄",
+        niveau: "Débutant",
+        description: "Répéter des instructions avec for, while, do…while et parcourir des collections avec for…of et for…in.",
+        lecons: ["Boucle for classique", "while et do…while", "break et continue", "for…of et for…in", "Boucles imbriquées"],
+        exercices: ["Somme 1 à 100", "FizzBuzz", "Pyramide d'étoiles", "Fibonacci", "🔥 Nombres premiers", "🔥 Jeu Deviner"],
+        concepts: ["for", "while", "do…while", "break", "continue", "for…of", "for…in", "imbriqué"]
+      },
+      {
+        id: "04",
+        titre: "Tableaux",
+        fichier: "modules/04-tableaux.js",
+        emoji: "📋",
+        niveau: "Intermédiaire",
+        description: "Créer et manipuler des tableaux avec les méthodes fondamentales : map, filter, reduce, sort et bien d'autres.",
+        lecons: ["Créer et indexer", "push / pop / shift / unshift / splice", "indexOf, includes, find", "map, filter, reduce, forEach", "sort, slice, join, flat, spread"],
+        exercices: ["Statistiques de notes", "Transformation de phrases", "Panier d'achat", "🔥 Sans doublons", "🔥 Aplatir et sommer"],
+        concepts: ["Array", "index", "map", "filter", "reduce", "forEach", "sort", "spread", "destructuration"]
+      },
+      {
+        id: "05",
+        titre: "Fonctions",
+        fichier: "modules/05-fonctions.js",
+        emoji: "⚙️",
+        niveau: "Intermédiaire",
+        description: "Maîtriser toutes les formes de fonctions : déclarations, expressions, fléchées, closures et récursivité.",
+        lecons: ["Déclaration vs expression", "Fonctions fléchées", "Paramètres par défaut et rest", "Fonctions d'ordre supérieur", "Closures", "Récursivité"],
+        exercices: ["Conversion températures", "Palindrome", "Calculatrice objet", "Pipeline map/filter/reduce", "🔥 Mémoïsation", "🔥 Curry"],
+        concepts: ["function", "arrow function", "return", "closure", "HOF", "rest params", "récursivité", "factory"]
+      },
+      {
+        id: "06",
+        titre: "Objets",
+        fichier: "modules/06-objets.js",
+        emoji: "📦",
+        niveau: "Intermédiaire",
+        description: "Créer et manipuler des objets, utiliser les classes ES6 avec constructeur, héritage, getters et setters.",
+        lecons: ["Objet littéral", "Méthodes et this", "Destructuration", "Spread et Object.*", "Classes ES6", "Héritage extends", "Getters & Setters"],
+        exercices: ["Carnet de contacts", "Classe Banque", "Héritage Véhicules", "🔥 Système gestion classe"],
+        concepts: ["object", "this", "class", "constructor", "extends", "super", "get", "set", "instanceof"]
+      },
+      {
+        id: "07",
+        titre: "DOM & Événements",
+        fichier: "modules/07-dom-evenements.js",
+        emoji: "🖱️",
+        niveau: "Avancé",
+        description: "Manipuler la page HTML avec JavaScript : sélectionner, modifier, créer des éléments et réagir aux événements utilisateur.",
+        lecons: ["Sélectionner des éléments", "Modifier contenu et styles", "Créer et insérer des éléments", "addEventListener", "Événements de formulaire", "Délégation d'événements", "LocalStorage"],
+        exercices: ["Todo List", "Formulaire avec validation", "Galerie interactive", "🔥 Quiz interactif"],
+        concepts: ["DOM", "querySelector", "createElement", "classList", "addEventListener", "event", "LocalStorage"]
+      },
+      {
+        id: "08",
+        titre: "Asynchrone",
+        fichier: "modules/08-asynchrone.js",
+        emoji: "⏳",
+        niveau: "Avancé",
+        description: "Comprendre le modèle asynchrone de JavaScript avec les callbacks, les Promises et la syntaxe moderne async/await.",
+        lecons: ["Pourquoi l'asynchrone ?", "Callbacks", "Promises (.then/.catch)", "Promise.all et Promise.race", "async / await", "fetch() et API REST", "Gestion des erreurs"],
+        exercices: ["Timer personnalisé", "Fetch + affichage HTML", "Interface avec chargement", "🔥 Parallèle vs séquentiel"],
+        concepts: ["async", "await", "Promise", "fetch", "callback", "setTimeout", "try/catch", "API REST"]
+      }
+    ];
+
+    const niveauCouleur = {
+      "Débutant":      "text-green-400 bg-green-400/10 border-green-400/20",
+      "Intermédiaire": "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
+      "Avancé":        "text-red-400 bg-red-400/10 border-red-400/20",
+    };
+
+    // ─── Render module cards ─────────────────────────────────
+    function renderModules() {
+      const grid = document.querySelector('#modules > div.grid');
+      grid.innerHTML = modules.map(m => `
+        <div class="module-card bg-[#16213E] rounded-xl border border-white/10 p-5 cursor-pointer"
+             onclick="ouvrirModule('${m.id}')">
+          <div class="flex items-start justify-between mb-3">
+            <span class="text-3xl">${m.emoji}</span>
+            <span class="text-xs font-mono text-[#F7DF1E]/60">${m.id}</span>
+          </div>
+          <h3 class="font-bold text-sm mb-2">${m.titre}</h3>
+          <span class="inline-block text-[10px] font-medium px-2 py-0.5 rounded border ${niveauCouleur[m.niveau]} mb-3">
+            ${m.niveau}
+          </span>
+          <div class="flex items-center justify-between text-xs text-gray-500">
+            <span>${m.lecons.length} leçons</span>
+            <span>${m.exercices.length} exercices</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ─── Open module detail ──────────────────────────────────
+    let moduleActif = null;
+
+    function ouvrirModule(id) {
+      const m = modules.find(x => x.id === id);
+      if (!m) return;
+
+      moduleActif = m;
+
+      document.getElementById('detail-badge').textContent = `Module ${m.id}`;
+      document.getElementById('detail-title').textContent = `${m.emoji} ${m.titre}`;
+      document.getElementById('detail-description').textContent = m.description;
+
+      // Leçons
+      document.getElementById('detail-lecons').innerHTML = m.lecons.map((l, i) => `
+        <div class="flex items-center gap-3 p-3 bg-[#0F3460]/50 rounded-lg">
+          <span class="w-6 h-6 rounded-full bg-[#F7DF1E]/10 text-[#F7DF1E] text-xs flex items-center justify-center font-mono flex-shrink-0">${i+1}</span>
+          <span class="text-sm">${l}</span>
+        </div>
+      `).join('');
+
+      // Exercices
+      document.getElementById('detail-exercices').innerHTML = m.exercices.map((e, i) => `
+        <div class="flex items-center gap-3 p-3 bg-[#0F3460]/30 rounded-lg border border-white/5">
+          <input type="checkbox" id="ex-${id}-${i}"
+                 class="w-4 h-4 accent-[#F7DF1E] cursor-pointer"
+                 onchange="sauvegarderProgression()" />
+          <label for="ex-${id}-${i}" class="text-sm cursor-pointer flex-1">${e}</label>
+        </div>
+      `).join('');
+
+      // Restore checkbox states
+      m.exercices.forEach((_, i) => {
+        const cb = document.getElementById(`ex-${id}-${i}`);
+        if (cb) cb.checked = (localStorage.getItem(`ex-${id}-${i}`) === 'true');
+      });
+
+      // Concepts
+      document.getElementById('detail-concepts').innerHTML = m.concepts.map(c => `
+        <span class="text-xs font-mono bg-[#F7DF1E]/10 text-[#F7DF1E] border border-[#F7DF1E]/20 px-2 py-1 rounded">${c}</span>
+      `).join('');
+
+      // Show & scroll
+      const detail = document.getElementById('module-detail');
+      detail.classList.remove('hidden');
+      detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Reset tabs
+      switchTab('lecons', document.querySelector('.tab-btn'));
+      marquerModuleVu(id);
+    }
+
+    function fermerDetail() {
+      document.getElementById('module-detail').classList.add('hidden');
+    }
+
+    function switchTab(tab, btn) {
+      ['lecons','exercices','concepts'].forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+      });
+      document.getElementById('tab-' + tab).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'text-[#1A1A2E]'));
+      if (btn) btn.classList.add('active');
+    }
+
+    // ─── Progression ────────────────────────────────────────
+    function marquerModuleVu(id) {
+      const vu = JSON.parse(localStorage.getItem('modules-vus') || '[]');
+      if (!vu.includes(id)) {
+        vu.push(id);
+        localStorage.setItem('modules-vus', JSON.stringify(vu));
+      }
+      renderProgression();
+    }
+
+    function sauvegarderProgression() {
+      if (!moduleActif) return;
+      moduleActif.exercices.forEach((_, i) => {
+        const cb = document.getElementById(`ex-${moduleActif.id}-${i}`);
+        if (cb) localStorage.setItem(`ex-${moduleActif.id}-${i}`, cb.checked);
+      });
+    }
+
+    function renderProgression() {
+      const vu = JSON.parse(localStorage.getItem('modules-vus') || '[]');
+      const pct = Math.round((vu.length / modules.length) * 100);
+
+      document.getElementById('progress-text').textContent = `${vu.length} / ${modules.length}`;
+      document.getElementById('progress-bar').style.width = pct + '%';
+
+      document.getElementById('progress-modules').innerHTML = modules.map(m => `
+        <div class="flex items-center gap-2 p-2 rounded-lg ${vu.includes(m.id) ? 'bg-[#F7DF1E]/10 border border-[#F7DF1E]/20' : 'bg-[#0F3460]/30'}">
+          <span class="${vu.includes(m.id) ? 'text-[#F7DF1E]' : 'text-gray-600'} text-lg">${m.emoji}</span>
+          <div class="min-w-0">
+            <p class="text-xs font-medium truncate">${m.titre}</p>
+            <p class="text-[10px] ${vu.includes(m.id) ? 'text-[#F7DF1E]/70' : 'text-gray-600'}">${vu.includes(m.id) ? '✓ Vu' : 'Non commencé'}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ─── Playground ─────────────────────────────────────────
+    const snippets = {
+      boucle: `// Boucle for — afficher les carrés de 1 à 10
+for (let i = 1; i <= 10; i++) {
+  console.log(\`\${i}² = \${i * i}\`);
+}`,
+      tableau: `// Map et Filter
+const notes = [7, 14, 12, 5, 18, 9, 16, 11];
+
+const admis = notes.filter(n => n >= 10);
+console.log('Admis :', admis);
+
+const bonifies = admis.map(n => n * 1.1);
+console.log('Bonifiés :', bonifies.map(n => n.toFixed(1)));
+
+const moyenne = admis.reduce((s, n) => s + n, 0) / admis.length;
+console.log('Moyenne :', moyenne.toFixed(2));`,
+      classe: `// Classe ES6 avec héritage
+class Animal {
+  constructor(nom, espece) {
+    this.nom = nom;
+    this.espece = espece;
+  }
+  sePresenter() {
+    return \`Je suis \${this.nom}, un(e) \${this.espece}.\`;
+  }
+}
+
+class Chien extends Animal {
+  constructor(nom, race) {
+    super(nom, "chien");
+    this.race = race;
+  }
+  aboyer() { return "Woof ! Woof !"; }
+}
+
+const rex = new Chien("Rex", "Berger Allemand");
+console.log(rex.sePresenter());
+console.log(rex.aboyer());
+console.log(rex instanceof Animal);`,
+      async: `// Simulation async / await
+function attendre(ms) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
+async function compteARebours() {
+  for (let i = 5; i >= 1; i--) {
+    console.log(i + "...");
+    await attendre(500);
+  }
+  console.log("🚀 Décollage !");
+}
+
+compteARebours();`,
+      fizzbuzz: `// FizzBuzz classique
+for (let i = 1; i <= 30; i++) {
+  if      (i % 15 === 0) console.log("FizzBuzz");
+  else if (i %  3 === 0) console.log("Fizz");
+  else if (i %  5 === 0) console.log("Buzz");
+  else                   console.log(i);
+}`
+    };
+
+    function chargerSnippet(nom) {
+      document.getElementById('code-editor').value = snippets[nom];
+    }
+
+    function effacerCode() {
+      document.getElementById('code-editor').value = '';
+      effacerConsole();
+    }
+
+    function effacerConsole() {
+      document.getElementById('console-output').innerHTML =
+        '<span class="text-gray-600">// Résultats...</span>';
+    }
+
+    function executerCode() {
+      const code = document.getElementById('code-editor').value;
+      const output = document.getElementById('console-output');
+      output.innerHTML = '';
+
+      const logs = [];
+      const origLog = console.log;
+      const origError = console.error;
+
+      console.log = (...args) => {
+        logs.push({ type: 'log', msg: args.map(formatVal).join(' ') });
+        origLog(...args);
+      };
+      console.error = (...args) => {
+        logs.push({ type: 'error', msg: args.map(formatVal).join(' ') });
+        origError(...args);
+      };
+
+      try {
+        eval(code);
+        setTimeout(() => {
+          renderLogs(output, logs);
+          console.log = origLog;
+          console.error = origError;
+        }, 50);
+      } catch (e) {
+        console.log = origLog;
+        console.error = origError;
+        logs.push({ type: 'error', msg: '❌ ' + e.message });
+        renderLogs(output, logs);
+      }
+    }
+
+    function formatVal(v) {
+      if (v === null) return 'null';
+      if (v === undefined) return 'undefined';
+      if (Array.isArray(v)) return JSON.stringify(v);
+      if (typeof v === 'object') return JSON.stringify(v, null, 2);
+      return String(v);
+    }
+
+    function renderLogs(output, logs) {
+      if (logs.length === 0) {
+        output.innerHTML = '<span class="text-gray-500">// Aucune sortie</span>';
+        return;
+      }
+      output.innerHTML = logs.map(l => `
+        <div class="${l.type === 'error' ? 'text-red-400' : 'text-green-300'} mb-1">
+          <span class="text-gray-600 select-none mr-2">›</span>${escapeHtml(l.msg)}
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // ─── Init ────────────────────────────────────────────────
+    renderModules();
+    renderProgression();
+  </script>
+</body>
+</html>
