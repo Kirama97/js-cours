@@ -59,8 +59,8 @@ console.log(5 === "5");   // false (égalité valeur ET type) ← préférer ===
 console.log(5 !== 4);     // true
 
 // Logiques
-console.log(true && false);  // false  (ET)
-console.log(true || false);  // true   (OU)
+console.log(true && false);  // false  (ET)  meme si 99% et vrais si 1% et faux il te dira faux
+console.log(true || false);  // true   (OU) meme si 99% et faux si 1% et vrais il te dira vrais
 console.log(!true);          // false  (NON)
 
 // ============================================================

@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+body { 
+  font-family: 'Space Grotesk', sans-serif; 
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1A1A2E; }
+::-webkit-scrollbar-thumb { background: #F7DF1E; border-radius: 3px; }
+
+/* Code block styling */
+pre, code, textarea { 
+  font-family: 'JetBrains Mono', monospace; 
+}
+
+.lecon-content pre {
+  background-color: #0d1117;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+
+/* Accessibility: Focus styles */
+*:focus-visible {
+  outline: 2px solid #F7DF1E;
+  outline-offset: 2px;
+}
+
+/* Module card hover effect */
+.module-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.module-card:hover, .module-card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(247, 223, 30, 0.2);
+}
+
+/* Progress bar animation */
+.progress-fill {
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animated badge */
+@keyframes pulse-yellow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(247,223,30,0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(247,223,30,0); }
+}
+.badge-active { animation: pulse-yellow 2s infinite; }
+
+/* Exercise toggle */
+details summary { cursor: pointer; list-style: none; }
+details summary::marker, details summary::-webkit-details-marker { display: none; }
+details[open] .chevron { transform: rotate(180deg); }
+.chevron { transition: transform 0.3s ease; }
+
+/* Tab active state */
+.tab-btn.active {
+  background-color: #F7DF1E;
+  color: #1A1A2E;
+}
+
+/* Console output */
+#console-output {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  max-height: 250px;
+  overflow-y: auto;
+}

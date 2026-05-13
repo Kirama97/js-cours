@@ -28,24 +28,41 @@ let score = 55;
 let resultat = score >= 50 ? "Admis" : "Recalé";
 console.log(resultat);  // "Admis"
 
-ler
-let jour = "Lundi";
+let jour = 1;
 
 switch (jour) {
-  case "Lundi":
-  case "Mardi":
-  case "Mercredi":
-  case "Jeudi":
-  case "Vendredi":
-    console.log("Jour de semaine");
+  case 1:
+    console.log("Lundi");
     break;
-  case "Samedi":
-  case "Dimanche":
-    console.log("Weekend !");
+
+  case 2:
+    console.log("Mardi");
     break;
+
+  case 3:
+    console.log("Mercredi");
+    break;
+
+  case 4:
+    console.log("Jeudi");
+    break;
+
+  case 5:
+    console.log("Vendredi");
+    break;
+
+  case 6:
+    console.log("Samedi");
+    break;
+
+  case 7:
+    console.log("Dimanche");
+    break;
+
   default:
     console.log("Jour inconnu");
 }
+
 
 // ───────────────────────────────────────────────
 //  LEÇON 4 : Nullish coalescing (??) et Optional chaining (?.)
