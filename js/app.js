@@ -24,13 +24,58 @@ document.addEventListener('DOMContentLoaded', () => {
   editor.addEventListener('input', () => {
     localStorage.setItem('playground-code', editor.value);
   });
+
+  // Gestion du Thème (Sombre/Clair)
+  initTheme();
+
+  // Afficher le popup de bienvenue seulement au premier lancement
+  const hasSeenWelcome = localStorage.getItem('welcome-seen');
+  if (!hasSeenWelcome) {
+    setTimeout(() => {
+      const modal = document.getElementById('welcome-modal');
+      const content = document.getElementById('welcome-modal-content');
+      modal.classList.remove('opacity-0', 'invisible');
+      content.classList.remove('scale-90');
+      content.classList.add('scale-100');
+      
+      // Marquer comme vu
+      localStorage.setItem('welcome-seen', 'true');
+    }, 500);
+  }
+
+  // Gestion du bouton "Back to Top"
+  const backToTopBtn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      backToTopBtn.classList.remove('opacity-0', 'invisible');
+      backToTopBtn.classList.add('opacity-100', 'visible');
+    } else {
+      backToTopBtn.classList.add('opacity-0', 'invisible');
+      backToTopBtn.classList.remove('opacity-100', 'visible');
+    }
+  });
 });
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+function fermerWelcomeModal() {
+  const modal = document.getElementById('welcome-modal');
+  const content = document.getElementById('welcome-modal-content');
+  content.classList.remove('scale-100');
+  content.classList.add('scale-90');
+  modal.classList.add('opacity-0', 'invisible');
+}
 
 // ─── Render module cards ─────────────────────────────────
 function renderModules() {
   const grid = document.getElementById('modules-grid');
   grid.innerHTML = modules.map(m => `
-    <article class="module-card bg-[#16213E] rounded-xl border border-white/10 p-5 cursor-pointer focus-visible:outline-none"
+    <article class="module-card bg-white dark:bg-[#16213E] rounded-xl border border-slate-200 dark:border-white/10 p-5 cursor-pointer focus-visible:outline-none shadow-sm transition-all"
              tabindex="0"
              role="button"
              aria-label="Ouvrir le module ${m.titre}"
@@ -38,13 +83,13 @@ function renderModules() {
              onkeypress="if(event.key === 'Enter') ouvrirModule('${m.id}')">
       <div class="flex items-start justify-between mb-3">
         <span class="text-3xl" aria-hidden="true">${m.emoji}</span>
-        <span class="text-xs font-mono text-[#F7DF1E]/60">Module ${m.id}</span>
+        <span class="text-xs font-mono text-slate-400 dark:text-[#F7DF1E]/60 transition-colors">Module ${m.id}</span>
       </div>
-      <h3 class="font-bold text-sm mb-2">${m.titre}</h3>
+      <h3 class="font-bold text-sm mb-2 text-slate-900 dark:text-white transition-colors">${m.titre}</h3>
       <span class="inline-block text-[10px] font-medium px-2 py-0.5 rounded border ${niveauCouleur[m.niveau]} mb-3">
         ${m.niveau}
       </span>
-      <div class="flex items-center justify-between text-xs text-gray-500">
+      <div class="flex items-center justify-between text-xs text-slate-500 dark:text-gray-500 transition-colors">
         <span>${m.lecons.length} leçons</span>
         <span>${m.exercices.length} exercices</span>
       </div>
@@ -65,36 +110,36 @@ function ouvrirModule(id) {
 
   // Leçons
   const indexLecons = m.lecons.map((l, i) => `
-    <div class="flex items-center gap-3 p-2 bg-[#0F3460]/50 rounded-lg mb-2">
+    <div class="flex items-center gap-3 p-2 bg-slate-100 dark:bg-[#0F3460]/50 rounded-lg mb-2 transition-colors">
       <span class="w-5 h-5 rounded-full bg-[#F7DF1E]/10 text-[#F7DF1E] text-[10px] flex items-center justify-center font-mono flex-shrink-0" aria-hidden="true">${i+1}</span>
-      <span class="text-xs font-semibold text-gray-300">${l}</span>
+      <span class="text-xs font-semibold text-slate-700 dark:text-gray-300 transition-colors">${l}</span>
     </div>
   `).join('');
   
   document.getElementById('detail-lecons').innerHTML = `
     <div class="mb-6">
-      <h4 class="text-xs text-gray-500 uppercase tracking-wider mb-3">Sommaire</h4>
+      <h4 class="text-xs text-slate-500 dark:text-gray-500 uppercase tracking-wider mb-3 transition-colors">Sommaire</h4>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">${indexLecons}</div>
     </div>
-    <div class="border-t border-white/10 pt-6">
-      <h4 class="text-xs text-gray-500 uppercase tracking-wider mb-4">Contenu du cours</h4>
-      <div class="lecon-content">
-        ${m.contenuLecon || "<p class='italic text-gray-400'>Le contenu n'est pas encore disponible.</p>"}
+    <div class="border-t border-slate-200 dark:border-white/10 pt-6 transition-colors">
+      <h4 class="text-xs text-slate-500 dark:text-gray-500 uppercase tracking-wider mb-4 transition-colors">Contenu du cours</h4>
+      <div class="lecon-content text-slate-700 dark:text-gray-300">
+        ${m.contenuLecon || "<p class='italic text-slate-400 dark:text-gray-400'>Le contenu n'est pas encore disponible.</p>"}
       </div>
     </div>
   `;
 
   // Exercices
   document.getElementById('detail-exercices').innerHTML = m.exercices.map((e, i) => `
-    <div class="flex flex-col gap-3 p-4 bg-[#0F3460]/30 rounded-lg border border-white/5">
+    <div class="flex flex-col gap-3 p-4 bg-slate-50 dark:bg-[#0F3460]/30 rounded-lg border border-slate-200 dark:border-white/5 transition-colors">
       <div class="flex items-start gap-3">
         <input type="checkbox" id="ex-${id}-${i}"
                class="w-4 h-4 mt-1 accent-[#F7DF1E] cursor-pointer focus-visible:outline-none"
                onchange="sauvegarderProgression()"
                aria-label="Marquer l'exercice ${e.titre} comme terminé" />
         <div class="flex-1 min-w-0">
-          <label for="ex-${id}-${i}" class="text-sm cursor-pointer font-bold text-[#F7DF1E] block mb-2">${e.titre}</label>
-          <div class="text-xs text-green-300 bg-[#0d1117] p-3 rounded border border-[#30363d] font-mono whitespace-pre-wrap leading-relaxed overflow-x-auto">${e.enonceFull || "Pas d'énoncé disponible."}</div>
+          <label for="ex-${id}-${i}" class="text-sm cursor-pointer font-bold text-[#F7DF1E] block mb-2 transition-colors">${e.titre}</label>
+          <div class="text-xs text-slate-700 dark:text-green-300 bg-slate-100 dark:bg-[#0d1117] p-3 rounded border border-slate-200 dark:border-[#30363d] font-mono whitespace-pre-wrap leading-relaxed overflow-x-auto transition-colors">${e.enonceFull || "Pas d'énoncé disponible."}</div>
         </div>
       </div>
       <div class="flex gap-2 pl-7 mt-1">
@@ -179,11 +224,11 @@ function renderProgression() {
   document.getElementById('progress-bar').setAttribute('aria-valuenow', pct);
 
   document.getElementById('progress-modules').innerHTML = modules.map(m => `
-    <div class="flex items-center gap-2 p-2 rounded-lg ${vu.includes(m.id) ? 'bg-[#F7DF1E]/10 border border-[#F7DF1E]/20' : 'bg-[#0F3460]/30'}">
-      <span class="${vu.includes(m.id) ? 'text-[#F7DF1E]' : 'text-gray-600'} text-lg" aria-hidden="true">${m.emoji}</span>
+    <div class="flex items-center gap-2 p-2 rounded-lg transition-colors ${vu.includes(m.id) ? 'bg-[#F7DF1E]/10 border border-[#F7DF1E]/20' : 'bg-slate-50 dark:bg-[#0F3460]/30 border border-transparent dark:border-transparent'}">
+      <span class="${vu.includes(m.id) ? 'text-[#F7DF1E]' : 'text-slate-300 dark:text-gray-600'} text-lg transition-colors" aria-hidden="true">${m.emoji}</span>
       <div class="min-w-0">
-        <p class="text-xs font-medium truncate">${m.titre}</p>
-        <p class="text-[10px] ${vu.includes(m.id) ? 'text-[#F7DF1E]/70' : 'text-gray-600'}">${vu.includes(m.id) ? '✓ Vu' : 'Non commencé'}</p>
+        <p class="text-xs font-medium truncate text-slate-700 dark:text-white transition-colors">${m.titre}</p>
+        <p class="text-[10px] ${vu.includes(m.id) ? 'text-[#F7DF1E]/70' : 'text-slate-400 dark:text-gray-600'} transition-colors">${vu.includes(m.id) ? '✓ Vu' : 'Non commencé'}</p>
       </div>
     </div>
   `).join('');
@@ -295,4 +340,48 @@ function renderLogs(output, logs) {
 
 function escapeHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─── Thème ──────────────────────────────────────────────
+
+function initTheme() {
+  const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+  const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+  const themeToggleBtn = document.getElementById('theme-toggle');
+
+  // Change the icons inside the button based on previous settings
+  if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    themeToggleLightIcon.classList.remove('hidden');
+    document.documentElement.classList.add('dark');
+  } else {
+    themeToggleDarkIcon.classList.remove('hidden');
+    document.documentElement.classList.remove('dark');
+  }
+
+  themeToggleBtn.addEventListener('click', function() {
+    // toggle icons inside button
+    themeToggleDarkIcon.classList.toggle('hidden');
+    themeToggleLightIcon.classList.toggle('hidden');
+
+    // if set via local storage previously
+    if (localStorage.getItem('color-theme')) {
+      if (localStorage.getItem('color-theme') === 'light') {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('color-theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('color-theme', 'light');
+      }
+
+    // if NOT set via local storage previously
+    } else {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('color-theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('color-theme', 'dark');
+      }
+    }
+  });
 }

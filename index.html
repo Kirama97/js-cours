@@ -4,12 +4,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="/image/logo_js.png" type="image/x-icon">
   <title>Cours JavaScript — Série d'exercices</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -34,24 +36,66 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="bg-[#1A1A2E] text-white min-h-screen">
+<body class="bg-slate-50 text-slate-900 dark:bg-[#1A1A2E] dark:text-white min-h-screen transition-colors duration-300">
+
+  <!-- ═══════════════════════════════════════════
+       POPUP BIENVENUE
+  ═══════════════════════════════════════════ -->
+  <div id="welcome-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 dark:bg-[#1A1A2E]/90 backdrop-blur-sm transition-all duration-500 opacity-0 invisible">
+    <div class="bg-white dark:bg-[#16213E] max-w-md w-full rounded-2xl border border-slate-200 dark:border-[#F7DF1E]/20 p-8 shadow-2xl transform scale-90 transition-transform duration-500" id="welcome-modal-content">
+      <div class="flex items-center justify-center gap-4 mb-6">
+        <div class="w-16 h-16 bg-[#F7DF1E] rounded-2xl flex items-center justify-center rotate-3 shadow-[0_0_20px_rgba(247,223,30,0.4)]">
+          <span class="text-[#1A1A2E] font-bold text-2xl" style="font-family:'JetBrains Mono'">JS</span>
+        </div>
+        <div class="w-16 h-16 rounded-full border-2 border-[#F7DF1E]/50 overflow-hidden shadow-[0_0_20px_rgba(247,223,30,0.2)]">
+          <img src="image/profil.png" alt="Profil" class="w-full h-full object-cover">
+        </div>
+      </div>
+      
+      <h2 class="text-2xl font-bold text-center mb-4 text-slate-900 dark:text-white transition-colors">Bienvenue ! </h2>
+      
+      <p class="text-slate-600 dark:text-gray-300 text-center mb-8 leading-relaxed transition-colors">
+        Prêt à maîtriser <span class="text-[#F7DF1E] font-semibold">JavaScript</span> ? 
+        Bon apprentissage dans cette série d'exercices progressifs.
+      </p>
+
+      <div class="bg-slate-50 dark:bg-[#0F3460]/50 rounded-xl p-4 mb-8 border border-slate-200 dark:border-white/5 transition-colors">
+        <p class="text-xs text-slate-500 dark:text-gray-400 text-center transition-colors">
+          Si ce projet vous est utile, vous pouvez me soutenir en donnant un petit quelque chose (100 FCFA).
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <button onclick="fermerWelcomeModal()" 
+                class="w-full bg-[#F7DF1E] text-[#1A1A2E] font-bold py-3 rounded-xl hover:bg-yellow-300 transition-colors shadow-lg">
+          C'est parti !
+        </button>
+        <a href="https://pay.wave.com/m/M_sn_bCfDE26Wd7Xt/c/sn/?amount=100" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="w-full border border-slate-200 dark:border-[#F7DF1E]/30 text-slate-600 dark:text-[#F7DF1E] font-semibold py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-[#F7DF1E]/10 transition-colors text-center flex items-center justify-center gap-2">
+           <img src="/image/wave.png" alt="" class="w-10 h-10"> Soutenir le projet
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══════════════════════════════════════════
        HEADER
   ═══════════════════════════════════════════ -->
-  <header class="bg-[#16213E] border-b border-[#F7DF1E]/20 sticky top-0 z-50">
+  <header class="bg-white dark:bg-[#16213E] border-b border-slate-200 dark:border-[#F7DF1E]/20 sticky top-0 z-50 transition-colors">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-[#F7DF1E] rounded-lg flex items-center justify-center">
+        <div class="w-10 h-10 bg-[#F7DF1E] rounded-lg flex items-center justify-center shadow-sm">
           <span class="text-[#1A1A2E] font-bold text-lg" style="font-family:'JetBrains Mono'">JS</span>
         </div>
         <div>
-          <h1 class="font-bold text-lg leading-tight">Cours JavaScript</h1>
-          <p class="text-xs text-gray-400">Série d'exercices progressifs</p>
+          <h1 class="font-bold text-lg leading-tight text-slate-900 dark:text-white">Cours JavaScript</h1>
+          <p class="text-xs text-slate-500 dark:text-gray-400">Série d'exercices progressifs</p>
         </div>
       </div>
 
-      <nav class="hidden md:flex items-center gap-6" aria-label="Statistiques du cours">
+      <nav class="hidden lg:flex items-center gap-6" aria-label="Statistiques du cours">
         <div class="text-center">
           <p class="text-[#F7DF1E] font-bold text-xl" id="total-exos">32</p>
           <p class="text-xs text-gray-400">Exercices</p>
@@ -65,6 +109,19 @@
           <p class="text-xs text-gray-400">Défis</p>
         </div>
       </nav>
+
+      <div class="flex items-center gap-4">
+        <!-- Bouton Theme Toggle -->
+        <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-[#0F3460] text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-[#16213E] transition-colors focus-visible:outline-none" aria-label="Changer le thème">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+
+        <a href="https://pay.wave.com/m/M_sn_bCfDE26Wd7Xt/c/sn/?amount=100" target="_blank" rel="noopener noreferrer"
+          class="support-btn-header hidden md:flex items-center gap-2 bg-[#F7DF1E] text-[#1A1A2E] px-4 py-2 rounded-full font-bold text-sm hover:scale-105 transition-all shadow-[0_0_15px_rgba(247,223,30,0.3)]">
+          <span>☕Me soutenir</span>
+        </a>
+      </div>
     </div>
   </header>
 
@@ -75,7 +132,7 @@
 
     <!-- HERO -->
     <section
-      class="bg-gradient-to-r from-[#16213E] to-[#0F3460] rounded-2xl p-8 mb-12 border border-[#F7DF1E]/10 relative overflow-hidden"
+      class="bg-white dark:bg-gradient-to-r dark:from-[#16213E] dark:to-[#0F3460] rounded-2xl p-8 mb-12 border border-slate-200 dark:border-[#F7DF1E]/10 relative overflow-hidden shadow-sm transition-colors"
       aria-labelledby="hero-title">
       <!-- Background decoration -->
       <div class="absolute top-0 right-0 w-64 h-64 bg-[#F7DF1E]/5 rounded-full -translate-y-1/2 translate-x-1/4"
@@ -89,10 +146,10 @@
           aria-hidden="true">
           console.log("Bienvenue ! 👋")
         </span>
-        <h2 id="hero-title" class="text-3xl md:text-4xl font-bold mb-3">
-          Maîtrisez <span class="text-[#F7DF1E]">JavaScript</span><br>par la pratique
+        <h2 id="hero-title" class="text-3xl md:text-4xl font-bold mb-3 text-slate-900 dark:text-white">
+          Maîtrisez <span class="text-[#F7DF1E] dark:text-[#F7DF1E]">JavaScript</span><br>par la pratique
         </h2>
-        <p class="text-gray-300 max-w-xl mb-6">
+        <p class="text-slate-600 dark:text-gray-300 max-w-xl mb-6">
           8 modules progressifs couvrant les fondamentaux du langage.
           Chaque module contient des leçons commentées et des exercices
           allant du simple au défi. Les modifications sont sauvegardées automatiquement.
@@ -112,7 +169,7 @@
 
     <!-- MODULES GRID -->
     <section id="modules" aria-labelledby="modules-title">
-      <h2 id="modules-title" class="text-2xl font-bold mb-6 flex items-center gap-3">
+      <h2 id="modules-title" class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white transition-colors">
         <span class="w-1 h-7 bg-[#F7DF1E] rounded-full inline-block" aria-hidden="true"></span>
         Modules du cours
       </h2>
@@ -124,35 +181,35 @@
 
     <!-- MODULE DETAIL VIEWER -->
     <section id="module-detail" class="hidden mb-16" aria-labelledby="detail-title" tabindex="-1">
-      <div class="bg-[#16213E] rounded-2xl border border-white/10 overflow-hidden">
+      <div class="bg-white dark:bg-[#16213E] rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-sm transition-colors">
 
         <!-- Module header -->
-        <div class="bg-[#0F3460] px-6 py-4 flex items-center justify-between">
+        <div class="bg-slate-100 dark:bg-[#0F3460] px-6 py-4 flex items-center justify-between border-b border-slate-200 dark:border-white/10">
           <div class="flex items-center gap-3">
             <span id="detail-badge"
               class="bg-[#F7DF1E] text-[#1A1A2E] text-xs font-bold font-mono px-2 py-1 rounded"></span>
-            <h3 id="detail-title" class="font-bold text-lg"></h3>
+            <h3 id="detail-title" class="font-bold text-lg text-slate-900 dark:text-white"></h3>
           </div>
           <button id="btn-close-detail" onclick="fermerDetail()"
-            class="text-gray-400 hover:text-white text-2xl leading-none focus-visible:outline-none p-1"
+            class="text-slate-400 hover:text-slate-600 dark:text-gray-400 dark:hover:text-white text-2xl leading-none focus-visible:outline-none p-1 transition-colors"
             aria-label="Fermer les détails du module">&times;</button>
         </div>
 
         <!-- Tabs -->
-        <div class="flex border-b border-white/10" role="tablist" aria-label="Contenu du module">
+        <div class="flex border-b border-slate-200 dark:border-white/10" role="tablist" aria-label="Contenu du module">
           <button class="tab-btn active px-5 py-3 text-sm font-medium transition-colors focus-visible:outline-none"
             role="tab" aria-selected="true" aria-controls="tab-lecons" id="btn-tab-lecons"
             onclick="switchTab('lecons', this)">
             📖 Leçons
           </button>
           <button
-            class="tab-btn px-5 py-3 text-sm font-medium text-gray-400 hover:text-white transition-colors focus-visible:outline-none"
+            class="tab-btn px-5 py-3 text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors focus-visible:outline-none"
             role="tab" aria-selected="false" aria-controls="tab-exercices" id="btn-tab-exercices"
             onclick="switchTab('exercices', this)">
             ✏️ Exercices
           </button>
           <button
-            class="tab-btn px-5 py-3 text-sm font-medium text-gray-400 hover:text-white transition-colors focus-visible:outline-none"
+            class="tab-btn px-5 py-3 text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors focus-visible:outline-none"
             role="tab" aria-selected="false" aria-controls="tab-concepts" id="btn-tab-concepts"
             onclick="switchTab('concepts', this)">
             💡 Concepts clés
@@ -161,7 +218,7 @@
 
         <!-- Tab content -->
         <div id="tab-lecons" class="p-6" role="tabpanel" aria-labelledby="btn-tab-lecons" aria-hidden="false">
-          <p id="detail-description" class="text-gray-300 mb-4"></p>
+          <p id="detail-description" class="text-slate-600 dark:text-gray-300 mb-4"></p>
           <div id="detail-lecons" class="space-y-3"></div>
         </div>
 
@@ -178,28 +235,28 @@
 
     <!-- PLAYGROUND -->
     <section id="playground" class="mb-16" aria-labelledby="playground-title">
-      <h2 id="playground-title" class="text-2xl font-bold mb-6 flex items-center gap-3">
+      <h2 id="playground-title" class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white transition-colors">
         <span class="w-1 h-7 bg-[#F7DF1E] rounded-full inline-block" aria-hidden="true"></span>
         Playground — Testez votre code
       </h2>
 
-      <div class="bg-[#16213E] rounded-2xl border border-white/10 overflow-hidden shadow-lg">
+      <div class="bg-white dark:bg-[#16213E] rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-lg transition-colors">
         <!-- Editor header -->
-        <div class="bg-[#0d1117] px-4 py-3 flex items-center justify-between border-b border-white/10">
+        <div class="bg-slate-50 dark:bg-[#0d1117] px-4 py-3 flex items-center justify-between border-b border-slate-200 dark:border-white/10">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-red-500" aria-hidden="true"></span>
             <span class="w-3 h-3 rounded-full bg-yellow-400" aria-hidden="true"></span>
             <span class="w-3 h-3 rounded-full bg-green-500" aria-hidden="true"></span>
-            <span class="ml-3 text-xs text-gray-400 font-mono">script.js</span>
-            <span class="ml-2 text-[10px] text-gray-500 italic hidden sm:inline">(Sauvegarde automatique)</span>
+            <span class="ml-3 text-xs text-slate-400 dark:text-gray-400 font-mono transition-colors">script.js</span>
+            <span class="ml-2 text-[10px] text-slate-500 dark:text-gray-500 italic hidden sm:inline transition-colors">(Sauvegarde automatique)</span>
           </div>
           <div class="flex gap-2">
             <button onclick="effacerCode()"
-              class="text-xs text-gray-400 hover:text-white px-3 py-1 rounded border border-white/10 hover:border-white/30 transition-colors focus-visible:outline-none">
+              class="text-xs text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white px-3 py-1 rounded border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/30 transition-colors focus-visible:outline-none">
               Effacer
             </button>
             <button onclick="executerCode()"
-              class="text-xs bg-[#F7DF1E] text-[#1A1A2E] font-semibold px-4 py-1 rounded hover:bg-yellow-300 transition-colors focus-visible:outline-none flex items-center gap-1">
+              class="text-xs bg-[#F7DF1E] text-[#1A1A2E] font-semibold px-4 py-1 rounded hover:bg-yellow-300 transition-colors focus-visible:outline-none flex items-center gap-1 shadow-sm">
               <span aria-hidden="true">▶</span> Exécuter
             </button>
           </div>
@@ -209,58 +266,58 @@
         <div>
           <label for="code-editor" class="sr-only">Éditeur de code JavaScript</label>
           <textarea id="code-editor"
-            class="w-full bg-[#0d1117] text-green-300 p-4 text-sm font-mono resize-y focus:outline-none focus-visible:ring-1 focus-visible:ring-[#F7DF1E] border-0"
+            class="w-full bg-slate-50 dark:bg-[#0d1117] text-slate-800 dark:text-green-300 p-4 text-sm font-mono resize-y focus:outline-none focus-visible:ring-1 focus-visible:ring-[#F7DF1E] border-0 transition-colors"
             style="min-height: 250px;" spellcheck="false"
             placeholder="// Écrivez votre code JavaScript ici...&#10;// Utilisez Tab pour indenter&#10;// Exemple :&#10;let fruits = ['Mangue', 'Banane', 'Papaye'];&#10;fruits.forEach(f => console.log(f));"></textarea>
         </div>
 
         <!-- Console -->
-        <div class="border-t border-white/10">
-          <div class="bg-[#0F3460] px-4 py-2 flex items-center justify-between">
-            <span class="text-xs text-gray-400 font-mono">Console</span>
+        <div class="border-t border-slate-200 dark:border-white/10">
+          <div class="bg-slate-100 dark:bg-[#0F3460] px-4 py-2 flex items-center justify-between transition-colors">
+            <span class="text-xs text-slate-500 dark:text-gray-400 font-mono transition-colors">Console</span>
             <button onclick="effacerConsole()"
-              class="text-xs text-gray-500 hover:text-gray-300 focus-visible:outline-none px-1 rounded">effacer</button>
+              class="text-xs text-slate-400 dark:text-gray-500 hover:text-slate-600 dark:hover:text-gray-300 focus-visible:outline-none px-1 rounded transition-colors">effacer</button>
           </div>
-          <div id="console-output" class="p-4 text-green-400 text-sm min-h-[100px]" aria-live="polite">
-            <span class="text-gray-600">// Les résultats de console.log() apparaîtront ici...</span>
+          <div id="console-output" class="p-4 bg-slate-50 dark:bg-[#0d1117] text-slate-700 dark:text-green-400 text-sm min-h-[100px] transition-colors" aria-live="polite">
+            <span class="text-slate-400 dark:text-gray-600 transition-colors">// Les résultats de console.log() apparaîtront ici...</span>
           </div>
         </div>
       </div>
 
       <!-- Snippets rapides -->
       <div class="mt-4">
-        <p class="text-xs text-gray-500 mb-3">Exemples rapides :</p>
+        <p class="text-xs text-slate-500 dark:text-gray-500 mb-3 transition-colors">Exemples rapides :</p>
         <div class="flex flex-wrap gap-2">
           <button onclick="chargerSnippet('boucle')"
-            class="snippet-btn text-xs bg-[#16213E] border border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none">Boucle
+            class="snippet-btn text-xs bg-white dark:bg-[#16213E] border border-slate-200 dark:border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none text-slate-700 dark:text-white shadow-sm">Boucle
             for</button>
           <button onclick="chargerSnippet('tableau')"
-            class="snippet-btn text-xs bg-[#16213E] border border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none">Map
+            class="snippet-btn text-xs bg-white dark:bg-[#16213E] border border-slate-200 dark:border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none text-slate-700 dark:text-white shadow-sm">Map
             / Filter</button>
           <button onclick="chargerSnippet('classe')"
-            class="snippet-btn text-xs bg-[#16213E] border border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none">Classe
+            class="snippet-btn text-xs bg-white dark:bg-[#16213E] border border-slate-200 dark:border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none text-slate-700 dark:text-white shadow-sm">Classe
             ES6</button>
           <button onclick="chargerSnippet('async')"
-            class="snippet-btn text-xs bg-[#16213E] border border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none">Async/Await</button>
+            class="snippet-btn text-xs bg-white dark:bg-[#16213E] border border-slate-200 dark:border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none text-slate-700 dark:text-white shadow-sm">Async/Await</button>
           <button onclick="chargerSnippet('fizzbuzz')"
-            class="snippet-btn text-xs bg-[#16213E] border border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none">FizzBuzz</button>
+            class="snippet-btn text-xs bg-white dark:bg-[#16213E] border border-slate-200 dark:border-white/10 hover:border-[#F7DF1E]/40 px-3 py-1.5 rounded-lg transition-colors focus-visible:outline-none text-slate-700 dark:text-white shadow-sm">FizzBuzz</button>
         </div>
       </div>
     </section>
 
     <!-- PROGRESSION TRACKER -->
     <section class="mb-16" aria-labelledby="progression-title">
-      <h2 id="progression-title" class="text-2xl font-bold mb-6 flex items-center gap-3">
+      <h2 id="progression-title" class="text-2xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white transition-colors">
         <span class="w-1 h-7 bg-[#F7DF1E] rounded-full inline-block" aria-hidden="true"></span>
         Ma progression
       </h2>
 
-      <div class="bg-[#16213E] rounded-2xl border border-white/10 p-6 shadow-lg">
+      <div class="bg-white dark:bg-[#16213E] rounded-2xl border border-slate-200 dark:border-white/10 p-6 shadow-lg transition-colors">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-sm text-gray-400">Modules vus</span>
+          <span class="text-sm text-slate-500 dark:text-gray-400 transition-colors">Modules vus</span>
           <span id="progress-text" class="text-sm font-bold text-[#F7DF1E]">0 / 8</span>
         </div>
-        <div class="w-full bg-[#0F3460] rounded-full h-3 mb-6" role="progressbar" aria-label="Progression des modules"
+        <div class="w-full bg-slate-100 dark:bg-[#0F3460] rounded-full h-3 mb-6 transition-colors" role="progressbar" aria-label="Progression des modules"
           aria-valuemin="0" aria-valuemax="100">
           <div id="progress-bar" class="progress-fill bg-[#F7DF1E] h-3 rounded-full" style="width:0%"></div>
         </div>
@@ -274,15 +331,38 @@
   <!-- ═══════════════════════════════════════════
        FOOTER
   ═══════════════════════════════════════════ -->
-  <footer class="border-t border-white/10 bg-[#16213E]">
+  <footer class="border-t border-slate-200 dark:border-white/10 bg-white dark:bg-[#16213E] transition-colors">
     <div class="max-w-7xl mx-auto px-6 py-8 text-center">
-      <p class="text-gray-500 text-sm">
-        Cours JavaScript — Chaque exercice se trouve dans le dossier
+      <p class="text-slate-500 dark:text-gray-500 text-sm transition-colors">
+        Cours JavaScript — Chaque exercice se trouve dans
         <span class="font-mono text-[#F7DF1E] bg-[#F7DF1E]/10 px-2 py-0.5 rounded">modules/</span>
       </p>
-      <p class="text-gray-600 text-xs mt-2">Bonne chance à tous les étudiants 🚀</p>
+      <p class="text-slate-600 dark:text-gray-600 text-xs mt-2 transition-colors">Bonne chance à tous les étudiants &copy; <a style="color: #F7DF1E;"
+          href="https://kira-dev-gamma.vercel.app/">Kira/Dev</a> </p>
+      <p class="text-xs mt-2 text-neutral-400">Email : Officialthiam97@gmail.com</p>
     </div>
   </footer>
+
+  <!-- Bouton Retour en haut -->
+  <button id="back-to-top" 
+     class="fixed bottom-24 right-6 z-[60] flex items-center justify-center w-12 h-12 bg-[#16213E] text-[#F7DF1E] rounded-full shadow-2xl border border-[#F7DF1E]/20 opacity-0 invisible transition-all duration-300 hover:bg-[#F7DF1E] hover:text-[#1A1A2E] hover:-translate-y-1"
+     onclick="scrollToTop()"
+     aria-label="Retour en haut de la page">
+    <span class="text-xl">↑</span>
+  </button>
+
+  <!-- Bouton de soutien flottant -->
+  <a href="https://pay.wave.com/m/M_sn_bCfDE26Wd7Xt/c/sn/?amount=100" target="_blank" rel="noopener noreferrer"
+    class="fixed bottom-6 right-6 z-[60] flex items-center justify-center w-14 h-14 bg-[#F7DF1E] text-[#1A1A2E] rounded-full shadow-2xl hover:scale-110 transition-transform group"
+    aria-label="Soutenir mon travail (100 FCFA)">
+    <span class="text-2xl group-hover:rotate-12 transition-transform">
+      <img src="/image/wave.png" alt="" srcset="">
+    </span>
+    <span
+      class="absolute right-full mr-3 bg-[#16213E] text-white text-xs py-1.5 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-[#F7DF1E]/20">
+      Soutenez mon travail (100 FCFA)
+    </span>
+  </a>
 
   <!-- Fichiers JS personnalisés -->
   <script src="js/data.js"></script>
