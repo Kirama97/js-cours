@@ -75,17 +75,19 @@ function fermerWelcomeModal() {
 function renderModules() {
   const grid = document.getElementById('modules-grid');
   grid.innerHTML = modules.map(m => `
-    <article class="module-card bg-white dark:bg-[#16213E] rounded-xl border border-slate-200 dark:border-white/10 p-5 cursor-pointer focus-visible:outline-none shadow-sm transition-all"
+    <article class="module-card group bg-white dark:bg-[#16213E] rounded-xl border border-slate-200 dark:border-white/10 p-5 cursor-pointer focus-visible:outline-none shadow-sm transition-all hover:shadow-xl hover:-translate-y-1"
              tabindex="0"
              role="button"
              aria-label="Ouvrir le module ${m.titre}"
              onclick="ouvrirModule('${m.id}')"
              onkeypress="if(event.key === 'Enter') ouvrirModule('${m.id}')">
-      <div class="flex items-start justify-between mb-3">
-        <span class="text-3xl" aria-hidden="true">${m.emoji}</span>
+      <div class="flex items-start justify-between mb-4">
+        <div class="w-10 h-10 flex items-center justify-center bg-[#F7DF1E]/10 dark:bg-[#F7DF1E]/5 rounded-full border border-[#F7DF1E]/20 dark:border-[#F7DF1E]/10 transition-all group-hover:bg-[#F7DF1E] group-hover:text-black group-hover:border-transparent">
+          <i data-lucide="${m.lucideIcon}" class="w-5 h-5 transition-transform group-hover:scale-110 duration-300"></i>
+        </div>
         <span class="text-xs font-mono text-slate-400 dark:text-[#F7DF1E]/60 transition-colors">Module ${m.id}</span>
       </div>
-      <h3 class="font-bold text-sm mb-2 text-slate-900 dark:text-white transition-colors">${m.titre}</h3>
+      <h3 class="font-bold text-sm mb-2 text-slate-900 dark:text-white transition-colors group-hover:text-[#F7DF1E]">${m.titre}</h3>
       <span class="inline-block text-[10px] font-medium px-2 py-0.5 rounded border ${niveauCouleur[m.niveau]} mb-3">
         ${m.niveau}
       </span>
@@ -95,6 +97,9 @@ function renderModules() {
       </div>
     </article>
   `).join('');
+  
+  // Initialiser les icônes Lucide après le rendu
+  if (window.lucide) lucide.createIcons();
 }
 
 // ─── Open module detail ──────────────────────────────────
@@ -224,14 +229,18 @@ function renderProgression() {
   document.getElementById('progress-bar').setAttribute('aria-valuenow', pct);
 
   document.getElementById('progress-modules').innerHTML = modules.map(m => `
-    <div class="flex items-center gap-2 p-2 rounded-lg transition-colors ${vu.includes(m.id) ? 'bg-[#F7DF1E]/10 border border-[#F7DF1E]/20' : 'bg-slate-50 dark:bg-[#0F3460]/30 border border-transparent dark:border-transparent'}">
-      <span class="${vu.includes(m.id) ? 'text-[#F7DF1E]' : 'text-slate-300 dark:text-gray-600'} text-lg transition-colors" aria-hidden="true">${m.emoji}</span>
+    <div class="flex items-center gap-3 p-2.5 rounded-xl transition-all ${vu.includes(m.id) ? 'bg-[#F7DF1E]/10 border border-[#F7DF1E]/20 shadow-sm' : 'bg-slate-50 dark:bg-[#0F3460]/30 border border-transparent'}">
+      <div class="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-white dark:bg-[#16213E] rounded-full shadow-sm border border-slate-100 dark:border-white/5">
+        <i data-lucide="${m.lucideIcon}" class="w-4 h-4 ${vu.includes(m.id) ? 'text-[#F7DF1E]' : 'text-slate-300 dark:text-gray-600'} transition-all"></i>
+      </div>
       <div class="min-w-0">
         <p class="text-xs font-medium truncate text-slate-700 dark:text-white transition-colors">${m.titre}</p>
         <p class="text-[10px] ${vu.includes(m.id) ? 'text-[#F7DF1E]/70' : 'text-slate-400 dark:text-gray-600'} transition-colors">${vu.includes(m.id) ? '✓ Vu' : 'Non commencé'}</p>
       </div>
     </div>
   `).join('');
+
+  if (window.lucide) lucide.createIcons();
 }
 
 // ─── Playground ─────────────────────────────────────────

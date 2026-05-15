@@ -3,7 +3,7 @@ const modules = [
     id: "01",
     titre: "Variables & Types",
     fichier: "modules/01-variables-types.js",
-    emoji: "🔤",
+    lucideIcon: "variable",
     niveau: "Débutant",
     description: "Déclarer des variables avec let/const, comprendre les types (string, number, boolean…) et maîtriser les opérateurs.",
     lecons: [
@@ -51,7 +51,7 @@ const modules = [
     id: "02",
     titre: "Conditions",
     fichier: "modules/02-conditions.js",
-    emoji: "🔀",
+    lucideIcon: "git-branch",
     niveau: "Débutant",
     description: "Contrôler le flux du programme avec if/else, switch, l'opérateur ternaire et les opérateurs modernes.",
     lecons: [
@@ -97,7 +97,7 @@ const modules = [
     id: "03",
     titre: "Boucles",
     fichier: "modules/03-boucles.js",
-    emoji: "🔄",
+    lucideIcon: "refresh-cw",
     niveau: "Débutant",
     description: "Répéter des instructions avec for, while, do…while et parcourir des collections avec for…of et for…in.",
     lecons: [
@@ -145,7 +145,7 @@ const modules = [
     id: "04",
     titre: "Tableaux",
     fichier: "modules/04-tableaux.js",
-    emoji: "📋",
+    lucideIcon: "list",
     niveau: "Intermédiaire",
     description: "Créer et manipuler des tableaux avec les méthodes fondamentales : map, filter, reduce, sort et bien d'autres.",
     lecons: [
@@ -194,7 +194,7 @@ const modules = [
     id: "05",
     titre: "Fonctions",
     fichier: "modules/05-fonctions.js",
-    emoji: "⚙️",
+    lucideIcon: "code-2",
     niveau: "Intermédiaire",
     description: "Maîtriser toutes les formes de fonctions : déclarations, expressions, fléchées, closures et récursivité.",
     lecons: [
@@ -243,7 +243,7 @@ const modules = [
     id: "06",
     titre: "Objets",
     fichier: "modules/06-objets.js",
-    emoji: "📦",
+    lucideIcon: "box",
     niveau: "Intermédiaire",
     description: "Créer et manipuler des objets, utiliser les classes ES6 avec constructeur, héritage, getters et setters.",
     lecons: [
@@ -294,7 +294,7 @@ const modules = [
     id: "07",
     titre: "DOM & Événements",
     fichier: "modules/07-dom-evenements.js",
-    emoji: "🖱️",
+    lucideIcon: "layout",
     niveau: "Avancé",
     description: "Manipuler la page HTML avec JavaScript : sélectionner, modifier, créer des éléments et réagir aux événements utilisateur.",
     lecons: [
@@ -343,7 +343,7 @@ const modules = [
     id: "08",
     titre: "Asynchrone",
     fichier: "modules/08-asynchrone.js",
-    emoji: "⏳",
+    lucideIcon: "clock",
     niveau: "Avancé",
     description: "Comprendre le modèle asynchrone de JavaScript avec les callbacks, les Promises et la syntaxe moderne async/await.",
     lecons: [
